@@ -1,7 +1,7 @@
 package dto
 
-class ForOrder {
-    ForOrder(String[] ingredients) {
+public class ForOrder {
+    public ForOrder(String[] ingredients) {
         this.ingredients = ingredients
     }
 
