@@ -56,13 +56,14 @@
                     <testFailureIgnore>false</testFailureIgnore>
                     <!--suppress UnresolvedMavenProperty -->
                     <argLine>
-                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/1.9.1/aspectjweaver-1.9.1.jar"
                     </argLine>
                     <properties>
                         <property>
                             <name>listener</name>
                             <value>io.qameta.allure.junit4.AllureJunit4</value>
                         </property>
+
                     </properties>
                     <systemProperties>
                         <property>
@@ -71,6 +72,13 @@
                         </property>
                     </systemProperties>
                 </configuration>
+            <dependencies>
+                <dependency>
+                    <groupId>org.aspectj</groupId>
+                    <artifactId>aspectjweaver</artifactId>
+                    <version>1.9.1</version>
+                </dependency>
+            </dependencies>
             </plugin>
             <plugin>
                 <groupId>io.qameta.allure</groupId>

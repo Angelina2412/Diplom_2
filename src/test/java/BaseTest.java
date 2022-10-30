@@ -1,3 +1,4 @@
+import clients.BaseApiClient;
 import dto.UniqUser;
 import org.junit.Before;
 
@@ -6,7 +7,7 @@ public class BaseTest {
 
     @Before
     public void makeTheUser(){
-        UniqUser uniqueUser = new UniqUser("pizdec10@mail.ru", "12345", "pizdec8");
+        UniqUser uniqueUser = new UniqUser("laguna11@mail.ru", "12345", "laguna9");
         apiClient.post("/api/auth/register",uniqueUser );
     }
 }

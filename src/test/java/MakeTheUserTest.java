@@ -1,11 +1,12 @@
+import clients.BaseApiClient;
 import dto.*;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Test;
 
-public class MakeTheUser {
+public class MakeTheUserTest {
     private final BaseApiClient apiClient = new BaseApiClient();
 
     @Test
@@ -13,9 +14,9 @@ public class MakeTheUser {
     public void makeTheUniqueUser(){
         RandomUser randomUser = RandomUser.getRandomUniqUser();
         Response message = apiClient.post("/api/auth/register",randomUser );
-        message.then().assertThat().body("success", Matchers.equalTo(true))
+        message.then().assertThat().statusCode(HttpStatus.SC_OK)
                 .and()
-                .statusCode(200);
+                .body("success", Matchers.equalTo(true));
     }
 
     @Test
@@ -24,39 +25,40 @@ public class MakeTheUser {
         RandomUser randomUser = RandomUser.getRandomUniqUser();
         apiClient.post("/api/auth/register",randomUser);
         Response message = apiClient.post("/api/auth/register",randomUser );
-        message.then().assertThat().body("message", Matchers.equalTo("User already exists"))
+        message.then().statusCode(HttpStatus.SC_FORBIDDEN)
                 .and()
-                .statusCode(403);
+                .assertThat().body("message", Matchers.equalTo("User already exists"));
+
     }
     @Test
     @DisplayName("Make the user without email")
     public void makeTheUserWithoutEmail(){
-        UserWithoutEmail userWithoutEmail = new UserWithoutEmail("123", "Pip");
+        UniqUser userWithoutEmail = new UniqUser("", "123","Pip");
         Response message = apiClient.post("/api/auth/register",userWithoutEmail );
-        message.then().assertThat().body("message", Matchers.equalTo("Email, password and name are required fields"))
+        message.then().assertThat().statusCode(HttpStatus.SC_FORBIDDEN)
+                .body("message", Matchers.equalTo("Email, password and name are required fields"))
                 .and()
-                .body("success",Matchers.equalTo(false ))
-                        .and()
-                .statusCode(403);
+                .body("success",Matchers.equalTo(false ));
     }
 
     @Test
     @DisplayName("Make the user without password")
     public void makeTheUserWithoutPassword(){
-        UserWithoutPassword userWithoutPassword = new UserWithoutPassword("jssjsj@mail.ru", "Alan");
+        UniqUser userWithoutPassword = new UniqUser("jssjsj@mail.ru", "","Alan");
         Response message = apiClient.post("/api/auth/register",userWithoutPassword );
-        message.then().assertThat().body("message", Matchers.equalTo("Email, password and name are required fields"))
+        message.then().statusCode(HttpStatus.SC_FORBIDDEN)
                 .and()
-                .statusCode(403);
+                .assertThat().body("message", Matchers.equalTo("Email, password and name are required fields"));
+
     }
     @Test
     @DisplayName("Make the user without name")
     public void makeTheUserWithoutName(){
-        UserWithoutName userWithoutName = new UserWithoutName("ssksks@mail.ru", "12345");
+        UniqUser userWithoutName = new UniqUser("ssksks@mail.ru", "12345","");
         Response message = apiClient.post("/api/auth/register",userWithoutName );
-        message.then().assertThat().body("message", Matchers.equalTo("Email, password and name are required fields"))
-                .and()
-                .statusCode(403);
+        message.then().statusCode(HttpStatus.SC_FORBIDDEN)
+                .assertThat().body("message", Matchers.equalTo("Email, password and name are required fields"));
+
     }
 
 }

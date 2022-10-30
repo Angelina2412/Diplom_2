@@ -2,15 +2,16 @@ import dto.ForRegister;
 import dto.UserDataChangingWithAuth;
 import io.qameta.allure.Description;
 import io.qameta.allure.Issue;
-import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
+import org.apache.http.protocol.HTTP;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserDataChanging extends BaseTest {
+public class UserDataChangingTest extends BaseTest {
 
     public String getAccessToken() {
         ForRegister forRegister = new ForRegister("pizdec10@mail.ru", "12345");
@@ -30,13 +31,12 @@ public class UserDataChanging extends BaseTest {
         auth.put("Authorization", accessToken);
         UserDataChangingWithAuth userDataChangingWithAuth = new UserDataChangingWithAuth("kakbit9@mail.ru", "1234", "Lrak9");
         Response message = apiClient.patch("/api/auth/user", auth, userDataChangingWithAuth);
-        message.then().assertThat().body("success", Matchers.equalTo(true))
-                .and()
-                .statusCode(200);
+        message.then().statusCode(HttpStatus.SC_OK)
+                .assertThat().body("success", Matchers.equalTo(true));
+
         Response response = apiClient.delete("/api/auth/user", auth);
-        response.then().assertThat().body("message", Matchers.equalTo("User successfully removed"))
-                .and()
-                .statusCode(202);
+        response.then().statusCode(HttpStatus.SC_ACCEPTED)
+                .assertThat().body("message", Matchers.equalTo("User successfully removed"));
 
     }
 
@@ -49,13 +49,11 @@ public class UserDataChanging extends BaseTest {
         auth.put("Authorization", accessToken);
         UserDataChangingWithAuth userDataChangingWithAuth = new UserDataChangingWithAuth("kakbit9@mail.ru", "12345", "pizdec9");
         Response message = apiClient.patch("/api/auth/user", auth, userDataChangingWithAuth);
-        message.then().assertThat().body("success", Matchers.equalTo(true))
-                .and()
-                .statusCode(200);
+        message.then().statusCode(HttpStatus.SC_OK)
+                 .assertThat().body("success", Matchers.equalTo(true));
         Response response = apiClient.delete("/api/auth/user", auth);
-        response.then().assertThat().body("message", Matchers.equalTo("User successfully removed"))
-                .and()
-                .statusCode(202);
+        response.then().statusCode(HttpStatus.SC_ACCEPTED)
+                .assertThat().body("message", Matchers.equalTo("User successfully removed"));
     }
     @Test
     @Description("Check the possibility to change the password field after auth")
@@ -66,13 +64,11 @@ public class UserDataChanging extends BaseTest {
         auth.put("Authorization", accessToken);
         UserDataChangingWithAuth userDataChangingWithAuth = new UserDataChangingWithAuth("kakbit9@mail.ru", "123456", "pizdec9");
         Response message = apiClient.patch("/api/auth/user", auth, userDataChangingWithAuth);
-        message.then().assertThat().body("success", Matchers.equalTo(true))
-                .and()
-                .statusCode(200);
+        message.then().statusCode(HttpStatus.SC_OK)
+                .assertThat().body("success", Matchers.equalTo(true));
         Response response = apiClient.delete("/api/auth/user", auth);
-        response.then().assertThat().body("message", Matchers.equalTo("User successfully removed"))
-                .and()
-                .statusCode(202);
+        response.then().statusCode(HttpStatus.SC_ACCEPTED)
+                .assertThat().body("message", Matchers.equalTo("User successfully removed"));
     }
     @Test
     @Description("Check the possibility to change the name field after auth")
@@ -83,15 +79,12 @@ public class UserDataChanging extends BaseTest {
         auth.put("Authorization", accessToken);
         UserDataChangingWithAuth userDataChangingWithAuth = new UserDataChangingWithAuth("kakbit9@mail.ru", "12345", "pizdec1");
         Response message = apiClient.patch("/api/auth/user", auth, userDataChangingWithAuth);
-        message.then().assertThat().body("success", Matchers.equalTo(true))
-                .and()
-                .statusCode(200);
+        message.then().statusCode(HttpStatus.SC_OK)
+                .assertThat().body("success", Matchers.equalTo(true));
         Response response = apiClient.delete("/api/auth/user", auth);
-        response.then().assertThat().body("message", Matchers.equalTo("User successfully removed"))
-                .and()
-                .statusCode(202);
+        response.then().statusCode(HttpStatus.SC_ACCEPTED)
+                .assertThat().body("message", Matchers.equalTo("User successfully removed"));
     }
-
 
     @Test
     @Description("Check the possibility to change the user's field without auth")
@@ -102,13 +95,11 @@ public class UserDataChanging extends BaseTest {
         auth.put("Authorization", accessToken);
         UserDataChangingWithAuth userDataChangingWithAuth = new UserDataChangingWithAuth("kakbit9@mail.ru", "12345", "pizdec1");
         Response message = apiClient.patch("/api/auth/user", userDataChangingWithAuth);
-        message.then().assertThat().body("message", Matchers.equalTo("You should be authorised"))
-                .and()
-                .statusCode(401);
+        message.then().statusCode(HttpStatus.SC_NOT_FOUND)
+                .assertThat().body("message", Matchers.equalTo("You should be authorised"));
         Response response = apiClient.delete("/api/auth/user", auth);
-        response.then().assertThat().body("message", Matchers.equalTo("User successfully removed"))
-                .and()
-                .statusCode(202);
+        response.then().statusCode(202)
+                .assertThat().body("message", Matchers.equalTo("User successfully removed"));
     }
     }
 
