@@ -1,8 +1,6 @@
 package clients;
-
 import dto.ForOrder;
 import io.restassured.response.Response;
-
 import java.util.Map;
 
 public class OrderClient {

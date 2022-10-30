@@ -4,7 +4,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
-import org.apache.http.protocol.HTTP;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Test;
@@ -62,6 +61,5 @@ public class GetTheUserOrdersTest extends BaseTest {
                 .statusCode(HttpStatus.SC_UNAUTHORIZED);
         registerAndGetAccessToken();
         makeTheOrder();
-
     }
 }
